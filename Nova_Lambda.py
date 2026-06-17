@@ -87,7 +87,7 @@ def lambda_handler(event, context):
     if not question:
         return {
             "statusCode": 400,
-            "body": json.dumps({"error": "question is empty", "received_body": body})
+            "body": json.dumps({"error": "question is empty"})
         }
 
     client = boto3.client(

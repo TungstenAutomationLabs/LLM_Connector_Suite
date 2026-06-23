@@ -146,27 +146,54 @@ You are an intelligent assistant integrated into a Tungsten TotalAgility workflo
 
 ---
 
+
 ## Connector-Specific Setup
 
 ### Claude
-- Requires Azure AI Foundry account + Claude model deployed
-- Server variables: Claude_API_Key, Claude_System_Prompt
-- Calls Azure endpoint directly via RESTful activity
-- See Claude/README.md
+- Requires Azure AI Foundry account with a Claude model deployed
+- Server variables: `Claude_API_Key`, `Claude_System_Prompt`
+- Calls the Azure AI Foundry endpoint directly via RESTful activity
+
+**Steps to get started:**
+1. Sign in to [Azure AI Foundry](https://ai.azure.com)
+2. Create a project and deploy a Claude model (e.g. claude-sonnet-4-6)
+3. Copy the endpoint URL and API key from the deployment page
+4. Set `Claude_API_Key` in TA server variables
+
+---
 
 ### Nova
-- Requires AWS account + Bedrock access + API Gateway + Lambda
-- Server variables: Nova_API_Key, Nova_System_Prompt
-- Calls API Gateway which triggers Lambda which calls Bedrock
-- See Nova/README.md
+- Requires AWS account with Bedrock access, API Gateway, and Lambda
+- Server variables: `Nova_API_Key`, `Nova_System_Prompt`
+- Calls API Gateway → Lambda → Bedrock Converse API
 
-### Gemini (coming v1.1)
+**Steps to get started:**
+1. Enable Amazon Nova model access in AWS Bedrock console (us-east-1)
+2. Deploy the provided `lambda_function.py` as a Lambda function
+3. Create an API Gateway (REST) trigger pointing to the Lambda
+4. Generate an API key in API Gateway and set it as `Nova_API_Key` in TA server variables
+
+---
+
+### Gemini
 - Requires Google AI Studio account + API key
-- Server variables: Gemini_API_Key, Gemini_Endpoint_URL
+- Server variables: `Gemini_API_Key`, `Gemini_Endpoint_URL`
+
+**Steps to get started:**
+1. Sign in to [Google AI Studio](https://aistudio.google.com)
+2. Generate an API key under API Keys
+3. Set `Gemini_API_Key` and `Gemini_Endpoint_URL` in TA server variables
+
+---
 
 ### Gemma (coming v1.2)
-- Requires Google Cloud Vertex AI + Gemma model deployed
-- Server variables: Gemma_API_Key, Gemma_Endpoint_URL
+- Requires Google Cloud Vertex AI with a Gemma model deployed
+- Server variables: `Gemma_API_Key`, `Gemma_Endpoint_URL`
+
+**Steps to get started:**
+1. Enable Vertex AI API in your Google Cloud project
+2. Deploy a Gemma model via Vertex AI Model Garden
+3. Copy the endpoint URL and set `Gemma_API_Key` and `Gemma_Endpoint_URL` in TA server variables
 
 ---
 
@@ -174,10 +201,9 @@ You are an intelligent assistant integrated into a Tungsten TotalAgility workflo
 
 | Rule | Detail |
 |---|---|
-| API keys in server variables | Never hardcoded in processes or scripts |
+| API keys in server variables | Never hardcoded in processes, scripts, or process variables |
 | Server variables not exported | Keys stay in your environment, not in the zip |
-| Keys not in GitHub | .gitignore excludes config files |
-| Never hardcode keys | Do not put API keys in process variables or scripts |
+| Keys not in GitHub | `.gitignore` excludes config files |
 
 ---
 
@@ -189,7 +215,6 @@ You are an intelligent assistant integrated into a Tungsten TotalAgility workflo
 - Set both flags when uploading a combo (doc + image)
 - Check STATUS = OK before using the response downstream
 - Use SYSTEMPROMPT to control output format per use case
-- Ask for JSON in your prompt if you need structured data
 
 ### Don't
 - Don't send DOCX or BMP files — not supported by any connector
@@ -200,37 +225,16 @@ You are an intelligent assistant integrated into a Tungsten TotalAgility workflo
 
 ## Error Reference
 
+> For a full list of tested scenarios and expected outputs, see Testing_Documents.
+
 | Error | Cause | Fix |
 |---|---|---|
 | Question cannot be empty | QUESTION not set | Set QUESTION before calling |
-| DOCEXISTS false despite upload | Flag not ticked | Tick HAS_DOCORIMAGE in debug |
-| An error occurred: HTTP | Convert to Base64 failed | Check KTA_SERVICE_URI server variable |
+| DOCEXISTS false despite upload | Flag not ticked | Tick HAS_DOCORIMAGE in activity |
+| An error occurred: HTTP | Convert to Base64 failed | Check `KTA_SERVICE_URI` server variable |
 | STATUS = error | API key wrong or expired | Check API key server variable |
-| Job suspended / Index error | Variable type mismatch | temperature = Short, max_token = Long |
-| File too large | Base64 over limit | Reduce file size |
+| Job suspended / Index error | Variable type mismatch | `TEMPERATURE` = Short, `MAX_TOKENS` = Long |
 | ValidationException | File name or format issue | Lambda auto-handles MIME and filename |
-
----
-
-## Versioning
-
-| Version | Changes |
-|---|---|
-| v1.0 | Claude + Nova — text, doc, image, combo |
-| v1.1 | Gemini connector + Custom Service packaging |
-| v1.2 | Gemma connector |
-| v1.3 | DOCX pre-conversion, URL-based document source |
-
----
-
-## Roadmap
-
-- Convert to Custom Service (v1.1)
-- Add CONTENT_LENGTH_BYTES early-rejection check
-- Gemini connector (Google AI Studio)
-- Gemma connector (Google Vertex AI)
-- DOCX to PDF pre-conversion
-- URL-based document source support
 
 ---
 

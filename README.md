@@ -4,66 +4,40 @@
 [![TotalAgility](https://img.shields.io/badge/TotalAgility-2026.1-blue)](https://www.tungsten.com)
 [![Version](https://img.shields.io/badge/Version-1.0-brightgreen)]()
 
-> A suite of plug-and-play AI connectors for Tungsten TotalAgility. Send text, documents, and images to leading AI models — no API knowledge required.
+> A suite of production-ready AI connectors for Tungsten TotalAgility, enabling text, document, and image processing through a consistent interface across leading AI models.
 
 ---
 
 ## What Is This?
 
-The LLM Connector Suite lets any TotalAgility process or third-party system call multiple AI models through a unified interface. Developers drop a connector into their workflow, map variables, and get an AI response — without knowing the underlying API.
+Stop rebuilding AI integrations every time a new model ships. The LLM Connector Suite provides a consistent interface for integrating AI capabilities into Tungsten TotalAgility workflows.
 
-Every connector follows the same structure: same input variables, same output variables, same routing logic. Only the backend (Azure, AWS, Google) differs.
+The LLM Connector Suite enables Tungsten TotalAgility processes and third-party applications to interact with leading AI models through a standardized interface. 
+Each connector follows the same input, output, and routing pattern, allowing organizations to switch AI providers with minimal workflow changes.
 
 ---
 
 ## Connector Overview
 
-| Connector | Model | Provider | Cloud | Status |
-|---|---|---|---|---|
-| Claude | claude-opus-4-6 | Anthropic | Azure AI Foundry | v1.0 |
-| Nova | amazon.nova-lite-v1 | Amazon | AWS Bedrock | v1.0 |
-| Gemini | gemini-pro | Google | Google AI Studio | Coming v1.1 |
-| Gemma | gemma-2 | Google | Google Vertex AI | Coming v1.2 |
+| Connector | AI Provider | Platform | Status |
+|---|---|---|---|
+| Claude | Anthropic | Azure AI Foundry | Available |
+| Nova | Amazon | AWS Bedrock | Available |
+| Gemini | Google | Google AI Studio | Available |
+| Gemma | Google | Google Vertex AI | Coming Soon |
 
----
-
-## Repository Structure
-
-```
-LLM_Connector_Suite/
-|
-├── Claude/
-│   ├── LLMConnector_Claude_v1.0.zip
-│   ├── README.md
-│   └── TestCases.xlsx
-|
-├── Nova/
-│   ├── LLMConnector_Nova_v1.0.zip
-│   ├── lambda_function.py
-│   ├── README.md
-│   └── TestCases.xlsx
-|
-├── Gemini/
-│   └── coming-soon.md
-|
-├── Gemma/
-│   └── coming-soon.md
-|
-└── README.md   (this file)
-```
 
 ---
 
 ## Supported Input Types
-
 | Input | Claude | Nova | Gemini | Gemma |
 |---|---|---|---|---|
-| Plain text | Yes | Yes | Soon | Soon |
-| PDF document | Yes | Yes | Soon | Soon |
-| Image (JPG, PNG, GIF, WebP) | Yes | Yes | Soon | Soon |
-| Pre-encoded base64 | Yes | Yes | Soon | Soon |
-| Document + Image combo | Yes | Yes | Soon | Soon |
-| DOCX, BMP | No | No | No | No |
+| Plain text | ✅ | ✅ | ✅ | 🔄 Soon |
+| PDF document | ✅ | ✅ | ✅ | 🔄 Soon |
+| Image (JPG, PNG, TIFF) | ✅ | ✅ | ✅ | 🔄 Soon |
+| Pre-encoded base64 | ✅ | ✅ | ✅ | 🔄 Soon |
+| Document + Image combo | ✅ | ✅ | ✅ | 🔄 Soon |
+| DOCX, BMP | ❌ | ❌ | ❌ | ❌ |
 
 ---
 
@@ -86,17 +60,8 @@ TA Process / Third-Party System
 
 **Routing logic (same for all connectors):**
 
-```
-Start
- → Document present? script   (sets DOCEXISTS, IMAGEEXISTS)
- → DOCEXISTS?
-     False → [Model]-text → Capture → End
-     True  → Has both image and document?  (IMAGEEXISTS = true)
-                 True  → [convert if needed] → [Model]-Combo → Capture → End
-                 False → Base64 present?
-                             True  → [Model]-doc/image → Capture → End
-                             False → Convert to Base64 → [Model]-doc/image → Capture → End
-```
+
+<img width="502" height="490" alt="image" src="https://github.com/user-attachments/assets/1f0e8db3-20c8-4f38-8953-44e90020df8a" />
 
 ---
 
@@ -113,8 +78,8 @@ Start
 
 ## Installation (any connector)
 
-1. Download the connector .zip from its folder
-2. TA Designer → Admin → Import → browse to .zip → Import
+1. Download the LLM_Connector_Suite.zip from its folder
+2. TA Designer → Import → browse to .zip → Import
 3. Set required server variables (see connector README)
 4. Test using TA Debug
 
@@ -131,21 +96,22 @@ Start
 | HAS_DOCANDIMAGE | Bool | Combo upload in TA | Tick when uploading two files (doc + image) |
 | DOCBASE64 | String | Third-party | Pre-encoded base64 of the main file |
 | IMAGEBASE64 | String | Third-party combo | Pre-encoded base64 of the second file |
-| SYSTEMPROMPT | String | Optional | Overrides default system prompt |
 | Model | String | Optional | Override the model ID |
 | max_token | Long | Optional | Token limit (default 500) |
 | temperature | Short | Optional | Randomness (default 0.5) |
 
+
+**NOTE:** System prompts are configured through the LLM_Connector_Suite Custom Service Group and are not exposed as process input variables. Each connector uses its own server variable for system prompt configuration (for example: Claude_System_Prompt, Nova_System_Prompt, Gemini_System_Prompt).
+
+Model selection behavior varies by connector. Claude and Nova support model configuration through the Model variable, while Gemini uses the configured endpoint and provider defaults.
 ### Outputs
 
 | Variable | Type | Description |
 |---|---|---|
-| RESPONSE | String | The AI answer |
-| STATUS | String | OK or error message |
-| INPUT_TOKENS | String | Tokens sent |
-| OUTPUT_TOKENS | String | Tokens returned |
+| LLM_RESPONSE | String | Response returned by the AI model |
+| STATUS | String | Success or error status |
+| LLM_TOKENS | String | Total tokens consumed for the request |
 
-> Output naming differs slightly per connector: CLAUDE_RESPONSE, NOVA_RESPONSE, etc.
 
 ---
 
@@ -159,67 +125,24 @@ Start
 | Third-party single | Yes | false | false | yes | - | - |
 | Third-party combo | Yes | false | false | yes | yes | - |
 
-> For third-party combo, both flags stay false — IMAGEEXISTS is set automatically because IMAGEBASE64 is present.
-
----
+> For third-party combo, both flags stay false
 
 ## How to Test (TA Debug)
 
-```
-+------------------+----------------------------------------------+
-| Scenario         | What to fill                                 |
-+------------------+----------------------------------------------+
-| Text only        | QUESTION only                                |
-|                  | HAS_DOCORIMAGE  = unchecked                   |
-|                  | HAS_DOCANDIMAGE = unchecked                   |
-+------------------+----------------------------------------------+
-| Single file      | QUESTION                                     |
-| (PDF or image)   | Document       = Browse -> upload your file   |
-|                  | HAS_DOCORIMAGE  = TICK                        |
-|                  | HAS_DOCANDIMAGE = unchecked                   |
-+------------------+----------------------------------------------+
-| Combo            | QUESTION                                     |
-| (two files)      | Document       = Browse -> first file         |
-|                  | Image File     = Browse -> second file        |
-|                  | HAS_DOCORIMAGE  = TICK                        |
-|                  | HAS_DOCANDIMAGE = TICK                        |
-+------------------+----------------------------------------------+
-| Third party      | Send base64 in request body                  |
-| (API)            | both flags unchecked                         |
-+------------------+----------------------------------------------+
-```
+<img width="672" height="398" alt="image" src="https://github.com/user-attachments/assets/1caaf744-4241-4311-a013-324421aea2f6" />
+
+
 
 > Key rule: Document field = any single file. Image File field = the second file for combo only.
-
-### Recommended test order
-
-| # | Scenario | Key check |
-|---|---|---|
-| 1 | Text only | RESPONSE returns answer |
-| 2 | PDF upload | RESPONSE describes PDF |
-| 3 | JPG upload | RESPONSE describes image |
-| 4 | Combo doc + image | RESPONSE compares both |
-| 5 | Third-party base64 | RESPONSE via API |
-| 6 | Empty question | STATUS = question cannot be empty |
-| 7 | File without ticking flag | File ignored, text path only |
 
 ---
 
 ## Default System Prompt
 
-All connectors use this default (configurable via server variable):
+To ensure consistent responses across supported AI providers, each connector uses a predefined system prompt. The default prompt is shown below and can be customized through the connector-specific system prompt server variable.
 
-```
-You are an intelligent assistant integrated into a Tungsten TotalAgility workflow.
 
-Rules:
-- If a document or image is provided, base your response strictly on its content.
-- If only a text question is provided, answer from general knowledge accurately and concisely.
-- If asked to extract structured data, return valid JSON only — no markdown, no preamble, no explanation.
-- If the input is unclear or insufficient to answer, say so explicitly rather than guessing.
-- Keep responses professional and factual.
-- Do not make up information not present in provided content (when content is given).
-```
+You are an intelligent assistant integrated into a Tungsten TotalAgility workflow.\n\nRules:\n- If a document or image is provided, base your response strictly on its content.\n- If only a text question is provided, answer from general knowledge accurately and concisely.\n- If asked to extract structured data, return valid JSON only — no markdown, no preamble, no explanation.\n- If the input is unclear or insufficient to answer, say so explicitly rather than guessing.\n- Keep responses professional and factual.\n- Do not make up information not present in provided content (when content is given).
 
 ---
 

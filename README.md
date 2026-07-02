@@ -187,14 +187,25 @@ You are an intelligent assistant integrated into a Tungsten TotalAgility workflo
 
 ---
 
-### Gemma (coming v1.2)
-- Requires Google Cloud Vertex AI with a Gemma model deployed
-- Server variables: `Gemma_API_Key`, `Gemma_Endpoint_URL`
-
+### Open-Weight Models (Gemma, Qwen, etc.)
+- Requires Ollama (or vLLM / Hugging Face TGI) deployment exposing an OpenAI-compatible endpoint
+- Uses TA's existing **OpenAI-Compatible Connector** — no custom connector needed
+- Same setup works for Gemma, Qwen, Llama, Phi, etc. — only the model name changes
+  
 **Steps to get started:**
-1. Enable Vertex AI API in your Google Cloud project
-2. Deploy a Gemma model via Vertex AI Model Garden
-3. Copy the endpoint URL and set `Gemma_API_Key` and `Gemma_Endpoint_URL` in TA server variables
+1. Deploy Ollama on a reachable host (not `localhost`) — set `OLLAMA_HOST 0.0.0.0:11434`. Hosting options:
+   - Azure VM (NSG rule opened on the Ollama port)
+   - Azure VM behind Application Gateway / reverse proxy (HTTPS, no port in URL)
+   - Any on-prem or cloud server reachable from the TA instance
+2. Pull the desired model: `ollama pull <model-name>` (e.g. `gemma:26b`, `qwen2.5:14b`)
+3. In TA: **Advanced Integration → OpenAI-Compatible Connector**, set:
+| Field | Value |
+|---|---|
+| Base URL | `http://<VM-IP>:11434/v1` *(or your proxy/Gateway HTTPS URL)* |
+| Model name | exact Ollama tag, e.g. `gemma:26b` or `qwen2.5:14b` |
+| Auth header | `Authorization: Bearer <key-or-placeholder>` |
+ 
+To switch models later, just update the **Model name** field, no reconfiguration needed.
 
 ---
 

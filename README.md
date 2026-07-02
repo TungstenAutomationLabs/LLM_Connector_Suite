@@ -198,12 +198,24 @@ You are an intelligent assistant integrated into a Tungsten TotalAgility workflo
    - Azure VM behind Application Gateway / reverse proxy (HTTPS, no port in URL)
    - Any on-prem or cloud server reachable from the TA instance
 2. Pull the desired model: `ollama pull <model-name>` (e.g. `gemma:26b`, `qwen2.5:14b`)
-3. In TA: **Advanced Integration → OpenAI-Compatible Connector**, set:
+3. In TA: **Integration → Generative AI → New**, set:
+
 | Field | Value |
 |---|---|
-| Base URL | `http://<VM-IP>:11434/v1` *(or your proxy/Gateway HTTPS URL)* |
-| Model name | exact Ollama tag, e.g. `gemma:26b` or `qwen2.5:14b` |
-| Auth header | `Authorization: Bearer <key-or-placeholder>` |
+| Type | `OpenAI` |
+| ID / Display name | e.g. `Gemma 4` |
+| API URL | `https://<your-domain>/models/<model-name>/v1` *(or `http://<VM-IP>:11434/v1` if calling Ollama directly)* |
+| Authentication | `API key` |
+| API key | `<key-or-placeholder>` |
+| Model | exact Ollama tag, e.g. `google/gemma-4-26B-A4B-it`, `qwen2.5:14b` |
+| Temperature | `0.4` (adjust as needed) |
+| Timeout in seconds | `300` |
+| Retry count | `5` |
+ 
+> Same fields apply under **Vision Model** if the model supports image input — repeat with the same API URL, key, and model name.
+ 
+<img width="499" height="463" alt="image" src="https://github.com/user-attachments/assets/38d405cb-2e78-4e5f-99db-29c0a28a2b19" />
+
  
 To switch models later, just update the **Model name** field, no reconfiguration needed.
 

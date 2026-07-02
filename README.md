@@ -18,13 +18,14 @@ Each connector follows the same input, output, and routing pattern, allowing org
 ---
 
 ## Connector Overview
-
 | Connector | AI Provider | Platform | Status |
 |---|---|---|---|
 | Claude | Anthropic | Azure AI Foundry | Available |
 | Nova | Amazon | AWS Bedrock | Available |
 | Gemini | Google | Google AI Studio | Available |
-| Gemma | Google | Google Vertex AI | Coming Soon |
+| Gemma | Google | Self-hosted (Ollama / vLLM / Hugging Face TGI) | TA OpenAI-Compatible Connector |
+
+> **NOTE:** Gemma, Qwen, Llama, Phi, and other open-weight models can be self-hosted via Ollama / vLLM / TGI all of which expose an OpenAI-compatible completions API. Use TotalAgility's existing OpenAI-Compatible Connector to connect to any of these deployments.
 
 
 ---
@@ -32,11 +33,11 @@ Each connector follows the same input, output, and routing pattern, allowing org
 ## Supported Input Types
 | Input | Claude | Nova | Gemini | Gemma |
 |---|---|---|---|---|
-| Plain text | ✅ | ✅ | ✅ | 🔄 Soon |
-| PDF document | ✅ | ✅ | ✅ | 🔄 Soon |
-| Image (JPG, PNG, TIFF) | ✅ | ✅ | ✅ | 🔄 Soon |
-| Pre-encoded base64 | ✅ | ✅ | ✅ | 🔄 Soon |
-| Document + Image combo | ✅ | ✅ | ✅ | 🔄 Soon |
+| Plain text | ✅ | ✅ | ✅ | ✅ |
+| PDF document | ✅ | ✅ | ✅ | ✅ |
+| Image (JPG, PNG, TIFF) | ✅ | ✅ | ✅ | ✅ |
+| Pre-encoded base64 | ✅ | ✅ | ✅ | ✅ |
+| Document + Image combo | ✅ | ✅ | ✅ | ✅ |
 | DOCX, BMP | ❌ | ❌ | ❌ | ❌ |
 
 ---

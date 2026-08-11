@@ -222,6 +222,19 @@ To switch models later, just update the **Model name** field, no reconfiguration
 
 ---
 
+### Grok
+- Requires an xAI account with API access enabled
+- Server variables: `Grok_API_Key`, `Grok_System_Prompt`
+- Calls the xAI OpenAI-compatible endpoint via RESTful activity (Custom Service)
+
+**Steps to get started:**
+1. Sign in to the [xAI Console](https://console.x.ai)
+2. Generate an API key from the API Keys section
+3. Copy the API key and note the base endpoint (`https://api.x.ai/v1`)
+4. Set `Grok_API_Key` in TA server variables
+
+---
+
 ## Security
 
 | Rule | Detail |
@@ -231,6 +244,7 @@ To switch models later, just update the **Model name** field, no reconfiguration
 | Keys not in GitHub | `.gitignore` excludes config files |
 
 ---
+
 
 ## Do's and Don'ts
 

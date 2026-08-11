@@ -25,6 +25,7 @@ Each connector follows the same input, output, and routing pattern, allowing org
 | Gemini | Google | Google AI Studio | Available |
 | Gemma | Google | Self-hosted (Ollama / vLLM / Hugging Face TGI) | TA OpenAI-Compatible Connector |
 | Qwen | Open-weight | Self-hosted (Ollama / vLLM / Hugging Face TGI) | TA OpenAI-Compatible Connector |
+| Grok | xAI | xAI API | Available |
  
 > **NOTE:** Gemma, Qwen, Llama, Phi, and other open-weight models can be self-hosted via Ollama / vLLM / TGI — all of which expose an OpenAI-compatible completions API. Use TotalAgility's existing OpenAI-Compatible Connector to connect to any of these deployments.
  

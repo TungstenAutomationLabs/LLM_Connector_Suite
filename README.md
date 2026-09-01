@@ -24,6 +24,8 @@ Each connector follows the same input, output, and routing pattern, allowing org
 | Nova | Amazon | AWS Bedrock | Available |
 | Gemini | Google | Google AI Studio | Available |
 | Gemma | Google | Self-hosted (Ollama / vLLM / Hugging Face TGI) | TA OpenAI-Compatible Connector |
+| LLama | HF | Self-hosted (Ollama / vLLM / Hugging Face TGI) | TA OpenAI-Compatible Connector |
+| Mistral | HF | Self-hosted (Ollama / vLLM / Hugging Face TGI) | TA OpenAI-Compatible Connector |
 | Qwen | Open-weight | Self-hosted (Ollama / vLLM / Hugging Face TGI) | TA OpenAI-Compatible Connector |
 | Grok | xAI | xAI API | Available |
  

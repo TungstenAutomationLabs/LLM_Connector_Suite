@@ -153,16 +153,47 @@ You are an intelligent assistant integrated into a Tungsten TotalAgility workflo
 
 ## Connector-Specific Setup
 
-### Claude
-- Requires Azure AI Foundry account with a Claude model deployed
-- Server variables: `Claude_API_Key`, `Claude_System_Prompt`
-- Calls the Azure AI Foundry endpoint directly via RESTful activity
+## Claude Integration
 
-**Steps to get started:**
-1. Sign in to [Azure AI Foundry](https://ai.azure.com)
-2. Create a project and deploy a Claude model (e.g. claude-sonnet-4-6)
-3. Copy the endpoint URL and API key from the deployment page
-4. Set `Claude_API_Key` in TA server variables
+Claude can be integrated with Total Agility (TA) using either **Azure AI Foundry** or the **native Anthropic API**.
+
+### Method 1: Azure AI Foundry
+
+- Requires an **Azure AI Foundry** account with a Claude model deployed.
+- Server variables:
+  - `Claude_API_Key`
+  - `Claude_System_Prompt`
+- Calls the Azure AI Foundry endpoint directly via RESTful activity.
+
+#### Steps to Get Started
+
+1. Sign in to [Azure AI Foundry](https://ai.azure.com).
+2. Create a project and deploy a Claude model (for example, `claude-sonnet-4-6`).
+3. Copy the endpoint URL and API key from the deployment page.
+4. Set `Claude_API_Key` in TA server variables.
+5. Configure `Claude_System_Prompt` with the required system prompt.
+6. Configure the RESTful activity to call the Azure AI Foundry endpoint.
+
+---
+
+### Method 2: Native Anthropic API
+
+Claude can also be integrated using the **native Anthropic API**, without Azure AI Foundry.
+
+- Requires an **Anthropic API account** and API key.
+- Server variables:
+  - `Claude_API_Key`
+  - `Claude_System_Prompt`
+- Calls the Anthropic Messages API directly via RESTful activity.
+
+#### Steps to Get Started
+
+1. Sign in to the [Anthropic Console](https://console.anthropic.com).
+2. Create an Anthropic API key.
+3. Set the API key in TA server variables:
+
+   ```text
+   Claude_API_Key=<your-anthropic-api-key>
 
 ---
 

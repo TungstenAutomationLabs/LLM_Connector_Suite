@@ -20,7 +20,7 @@ Each connector follows the same input, output, and routing pattern, allowing org
 ## Connector Overview
 | Connector | AI Provider | Platform | Status |
 |---|---|---|---|
-| Claude | Anthropic | Azure AI Foundry | Available |
+| Claude | Anthropic | Azure AI Foundry, Native Anthropic API | Available |
 | Nova | Amazon | AWS Bedrock | Available |
 | Gemini | Google | Google AI Studio | Available |
 | Gemma | Google | Self-hosted (Ollama / vLLM / Hugging Face TGI) | TA OpenAI-Compatible Connector |
